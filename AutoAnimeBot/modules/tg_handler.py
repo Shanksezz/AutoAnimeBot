@@ -42,7 +42,7 @@ async def tg_handler(appp, TECHZ_API_KEY):
     app = appp
     queue = app.queue
     Gogo = TechZApi.Gogo(TECHZ_API_KEY)
-    Gogo.base = "https://animetopia-api-0cdbd873a81a.herokuapp.com"
+    Gogo.base = "https://api.techzbots.live"
 
     while True:
         if len(queue) != 0:
@@ -97,8 +97,8 @@ async def tg_handler(appp, TECHZ_API_KEY):
 
 async def start_uploading(app, q, l, eid):
     try:
-        title = eid.replace("-", " ").title().strip() + f" - {AT}"
-        file_name = f"[@{UPLOADS_CHANNEL_USERNAME}] {title}.mp4"
+        title = eid.replace("-", " ").title().strip() + f" - {q}"
+        file_name = f"{title} [@{UPLOADS_CHANNEL_USERNAME}].mp4"
 
         anime = eid.split("-episode-")[0].replace("-", " ").title().strip()
         id, img, tit = await get_anime_img(anime)
@@ -108,7 +108,7 @@ async def start_uploading(app, q, l, eid):
         file = await downloader(msg, l, title, file_name)
 
         await app.update_status(f"Uploading {title}")
-        video_id = await send_document(app, msg, file, id, tit, title, eid)
+        video_id = await upload_video(app, msg, file, id, tit, title, eid)
 
         return video_id, id, tit, eid.split("-episode-")[1]
     except Exception as e:
