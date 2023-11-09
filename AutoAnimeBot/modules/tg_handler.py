@@ -6,7 +6,7 @@ from pyrogram.types import (
     InlineKeyboardButton,
     CallbackQuery,
 )
-from AutoAnimeBot.modules.uploader import upload_video
+from AutoAnimeBot.modules.uploader import upload_document
 import os
 from AutoAnimeBot.modules.db import (
     add_to_failed,
@@ -97,8 +97,8 @@ async def tg_handler(appp, TECHZ_API_KEY):
 
 async def start_uploading(app, q, l, eid):
     try:
-        title = eid.replace("-", " ").title().strip() + f" - {q}"
-        file_name = f"{title} [@{UPLOADS_CHANNEL_USERNAME}].mp4"
+        title = eid.replace("-", " ").title().strip() + f" - {AT}"
+        file_name = f"[@{UPLOADS_CHANNEL_USERNAME}] {title}.mp4"
 
         anime = eid.split("-episode-")[0].replace("-", " ").title().strip()
         id, img, tit = await get_anime_img(anime)
@@ -108,7 +108,7 @@ async def start_uploading(app, q, l, eid):
         file = await downloader(msg, l, title, file_name)
 
         await app.update_status(f"Uploading {title}")
-        video_id = await upload_video(app, msg, file, id, tit, title, eid)
+        video_id = await upload_document(app, msg, file, id, tit, title, eid)
 
         return video_id, id, tit, eid.split("-episode-")[1]
     except Exception as e:
